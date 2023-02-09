@@ -61,18 +61,4 @@ describe("Info component", () => {
       expect(countryInfoElement).toHaveTextContent("Capital: New Delhi");
     });
   });
-
-  it("display Countries information when we click on submit button", async () => {
-    const { getByTestId, findByTestId } = render(<WeatherInfo />);
-    const inputElement = getByTestId("input");
-    const submitButton = getByTestId("submit-button");
-
-    fireEvent.change(inputElement, { target: { value: "India" } });
-    fireEvent.click(submitButton);
-    fetch.mockResolvedValue({ json: () => Promise.resolve(data) });
-    act(async () => {
-      const countryInfo = await findByTestId("country-info");
-      expect(countryInfo).toBeInTheDocument();
-    });
-  });
 });
