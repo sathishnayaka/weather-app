@@ -1,58 +1,58 @@
 /* eslint-disable testing-library/prefer-screen-queries */
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import Form from '../src/Form';
-import '@testing-library/jest-dom/extend-expect';
-import fetchMock from 'jest-fetch-mock';
+import React from "react";
+import { render, fireEvent, getByTestId } from "@testing-library/react";
+import Form from "../src/components/weather/Form";
+import "@testing-library/jest-dom/extend-expect";
+import fetchMock from "jest-fetch-mock";
 
-describe('Form component', () => {
-  jest.spyOn(window, 'alert').mockImplementation(() => {});
+jest.mock("node-fetch");
+
+describe("Form component", () => {
+  jest.spyOn(window, "alert").mockImplementation(() => {});
   afterEach(() => {
     jest.clearAllMocks();
   });
   beforeEach(() => {
     fetchMock.enableMocks();
   });
-  
+
   afterEach(() => {
     fetchMock.resetMocks();
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('should render the form correctly', () => {
+  it("should render the form correctly", () => {
     const onSubmit = jest.fn();
-    const { getByPlaceholderText, getByText } = render(<Form onSubmit={onSubmit} />);
-    expect(getByPlaceholderText('Enter country')).toBeInTheDocument();
-    expect(getByText('Submit')).toBeInTheDocument();
+    const { getByTestId } = render(<Form onSubmit={onSubmit} />);
+    expect(getByTestId("input")).toBeInTheDocument();
+    expect(getByTestId("submit-button")).toBeInTheDocument();
   });
 
-  it('should call onSubmit function when form is submitted', () => {
+  it("should call onSubmit function when form is submitted", () => {
     const onSubmit = jest.fn();
-    const { getByPlaceholderText, getByText } = render(<Form onSubmit={onSubmit} />);
-    const input = getByPlaceholderText('Enter country');
-    fireEvent.change(input, { target: { value: 'India' } });
-    fireEvent.submit(getByText('Submit'));
+    const { getByText, getByTestId } = render(<Form onSubmit={onSubmit} />);
+    const input = getByTestId("input");
+    fireEvent.change(input, { target: { value: "India" } });
+    fireEvent.submit(getByText("Submit"));
     expect(onSubmit).toHaveBeenCalled();
   });
 
-  it('should disable submit button when input is empty', () => {
+  it("should disable submit button when input is empty", () => {
     const onSubmit = jest.fn();
-    const { getByPlaceholderText, getByText } = render(<Form onSubmit={onSubmit} />);
-    const input = getByPlaceholderText('Enter country');
-    const submitButton = getByText('Submit');
+    const { getByTestId } = render(<Form onSubmit={onSubmit} />);
+    const submitButton = getByTestId("submit-button");
     fireEvent.submit(submitButton);
     expect(submitButton).toBeDisabled();
   });
 
   test("calls the onSubmit prop with the input value when the form is submitted", () => {
     const onSubmit = jest.fn();
-    const { getByText, getByPlaceholderText } = render(<Form onSubmit={onSubmit} />);
-    const inputField = getByPlaceholderText("Enter country");
-    fireEvent.change(inputField, { target: { value: "test" } });
-    const submitButton = getByText("Submit");
+    const { getByTestId } = render(<Form onSubmit={onSubmit} />);
+    const input = getByTestId("input");
+    fireEvent.change(input, { target: { value: "test" } });
+    const submitButton = getByTestId("submit-button");
     fireEvent.click(submitButton);
     expect(onSubmit).toHaveBeenCalledWith("test");
   });
-
 });

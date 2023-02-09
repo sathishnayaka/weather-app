@@ -27,11 +27,11 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
         type="text"
         placeholder="Enter country"
         value={inputValue}
-        data-testid= "input"
+        data-testid="input"
         style={{ fontSize: "24px", padding: "10px 20px", marginBottom: "20px" }}
         onChange={(event) => setInputValue(event.target.value)}
       />
-      <button type="submit" disabled={!inputValue} data-testid ="submit-button">
+      <button type="submit" disabled={!inputValue} data-testid="submit-button">
         Submit
       </button>
     </form>
